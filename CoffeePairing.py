@@ -32,8 +32,8 @@ def group_messages():
 
     # group message templapte, PROGRAM_NAME from the 1st branch
     message = f"""
-    Hello {", ".join(group_names)}!
-    You have been gathered together for a {PROGRAME_NAME}.
+    Hello {", ".join(participants)}!
+    You have been gathered together for a {PROGRAM_NAME}.
 
     To start your meeting: 
     {starter}
@@ -42,9 +42,9 @@ def group_messages():
     """
     
         # saving message to a file
-        file_name = f"group_{group_number}.txt"
+        file_name = f"group_{group_no}.txt"
         # MISSING LINE
-        group_number += 1 #increasing group number
+        group_no += 1 #increasing group number
         
 
 # path to the CSV files with participant data
@@ -196,7 +196,7 @@ with open(all_pairs_csv, mode) as file:
                 file.write(pair[i] + "\n")
 
 # calling the function to generate .txt - Sandra
-save_group_messages()
+group_messages()
              
 # print finishing message
 print()
