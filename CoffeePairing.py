@@ -11,13 +11,41 @@ def get_conversation_starter():
     if os.path.exists(starters_file): # check if the file exists, otherwise return the standard sentence
         with open(starters_file, 'r') as file:
             lines = open(starters_file).read().splitlines()
-            starter = random.choice(lines)
+            starter = random.choice(lines) #Vince, for lines 14-15, cannot we just use return random.choice(lines)?
             return starter
     return "What's your favorite colour?"  
 
 # test function, remove when finishing
 if __name__ == "__main__":
     print("Conversation starter:", get_conversation_starter())
+
+# function for making a txt file for each group (with convo.starter) - Sandra
+def group_messages():
+    group_no = 1 # tracking group numbering, initial value 1
+
+    for group in npairs:
+        group_list = list(group)
+        #MISSING LINE
+
+    # getting conversation starter
+    starter = get_conversation_starter()
+
+    # group message templapte, PROGRAM_NAME from the 1st branch
+    message = f"""
+    Hello {", ".join(group_names)}!
+    You have been gathered together for a {PROGRAME_NAME}.
+
+    To start your meeting: 
+    {starter}
+
+    Enjoy your coffee!
+    """
+    
+        # saving message to a file
+        file_name = f"group_{group_number}.txt"
+        # MISSING LINE
+        group_number += 1 #increasing group number
+        
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
@@ -167,7 +195,8 @@ with open(all_pairs_csv, mode) as file:
             else:
                 file.write(pair[i] + "\n")
 
-
+# calling the function to generate .txt - Sandra
+save_group_messages()
              
 # print finishing message
 print()
