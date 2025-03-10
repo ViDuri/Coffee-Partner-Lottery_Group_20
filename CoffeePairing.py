@@ -4,6 +4,8 @@ import random
 import copy
 import os
 
+# Check for changes in the csv input branch
+
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
 
