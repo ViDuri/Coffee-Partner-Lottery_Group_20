@@ -4,7 +4,22 @@ import random
 import copy
 import os
 
-# MAke changes to csv_vinput Ik snap het niet meer
+# program name and online form URL, we can change these when we made a decision for the 
+PROGRAM_NAME = "Mystery Brew"
+FORM_URL = "https://your_form_link_here" 
+
+def print_instructions():
+    instructions = f"""
+Welcome to {PROGRAM_NAME}!
+
+To sign up, please fill out the online form at:
+    {FORM_URL}
+
+After submitting the form, download the CSV file with responses.
+Make sure to save the CSV file as "Coffee Partner Lottery participants.csv"
+in the same directory as this script.
+"""
+    print(instructions)
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
