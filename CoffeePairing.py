@@ -4,7 +4,7 @@ import random
 import copy
 import os
 
-# MAke changes to csv_vinput
+# MAke changes to csv_vinput Ik snap het niet meer
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
