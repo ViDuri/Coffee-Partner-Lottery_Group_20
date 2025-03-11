@@ -1,11 +1,16 @@
-#####TESTING####
-
-
 import pandas as pd
 import csv
 import random
 import copy
 import os
+
+#Ask user for input to define group size
+while True:
+    group_size = int(input("Please enter your preferred group size (2-5): "))
+    if 2 <= group_size <= 5:
+        break
+    else:
+        print("Please enter a group size between 2 and 5")
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
@@ -56,43 +61,201 @@ new_pairs_found = False
 # try creating new pairing until successful
 while not new_pairs_found:   # to do: add a maximum number of tries
   
-    # if odd number of participants, create one triple, then pairs
-    if len(participants)%2 != 0:
-        
-        # take three random participants from list of participants
-        p1 = random.choice(nparticipants)
-        nparticipants.remove(p1)
-    
-        p2 = random.choice(nparticipants)
-        nparticipants.remove(p2)
-        
-        p3 = random.choice(nparticipants)
-        nparticipants.remove(p3)
-        
-        # create alphabetically sorted list of participants
-        plist = [p1, p2, p3]
-        plist.sort()
-                        
-        # add alphabetically sorted list to set of pairs
-        npairs.add(tuple(plist))
+    # if participants cannot be evenly divided into groups
+    while len(nparticipants) % group_size != 0:
 
+        if len(nparticipants)%group_size == 1:
+            if group_size == 2:
+                p1 = random.choice(nparticipants)
+                nparticipants.remove(p1)
+        
+                p2 = random.choice(nparticipants)
+                nparticipants.remove(p2)
+
+                p3 = random.choice(nparticipants)
+                nparticipants.remove(p3)
+                        
+                plist = sorted([p1, p2, p3])  # Alphabetically sorted
+                npairs.add(tuple(plist))
+            elif group_size == 3:
+                p1 = random.choice(nparticipants)
+                nparticipants.remove(p1)
+                
+                p2 = random.choice(nparticipants)
+                nparticipants.remove(p2)
+
+                p3 = random.choice(nparticipants)
+                nparticipants.remove(p3)    
+
+                p4 = random.choice(nparticipants)
+                nparticipants.remove(p4)    
+
+                plist = sorted([p1, p2, p3, p4])
+                npairs.add(tuple(plist))
+            elif group_size == 4:
+                p1 = random.choice(nparticipants)
+                nparticipants.remove(p1)
+            
+                p2 = random.choice(nparticipants)
+                nparticipants.remove(p2)
+
+                p3 = random.choice(nparticipants)
+                nparticipants.remove(p3)
+
+                p4 = random.choice(nparticipants)
+                nparticipants.remove(p4)    
+
+                p5 = random.choice(nparticipants)
+                nparticipants.remove(p5) 
+
+                # create alphabetically sorted list of participants
+                plist = [p1, p2, p3, p4, p5]
+                plist.sort()
+                            
+                # add alphabetically sorted list to set of pairs
+                npairs.add(tuple(plist))
+            else:
+                p1 = random.choice(nparticipants)
+                nparticipants.remove(p1)
+            
+                p2 = random.choice(nparticipants)
+                nparticipants.remove(p2)
+
+                p3 = random.choice(nparticipants)
+                nparticipants.remove(p3)
+
+                p4 = random.choice(nparticipants)
+                nparticipants.remove(p4)    
+
+                p5 = random.choice(nparticipants)
+                nparticipants.remove(p5) 
+
+                p6 = random.choice(nparticipants)
+                nparticipants.remove(p6) 
+                # create alphabetically sorted list of participants
+                plist = [p1, p2, p3, p4, p5, p6]
+                plist.sort()
+                            
+                # add alphabetically sorted list to set of pairs
+                npairs.add(tuple(plist))
+       
+        elif len(nparticipants)%group_size == 2:
+            p1 = random.choice(nparticipants)
+            nparticipants.remove(p1)
+       
+            p2 = random.choice(nparticipants)
+            nparticipants.remove(p2) 
+
+            plist = sorted([p1, p2])  
+            npairs.add(tuple(plist)) 
+
+        elif len(nparticipants)%group_size == 3:
+            p1 = random.choice(nparticipants)
+            nparticipants.remove(p1)
+       
+            p2 = random.choice(nparticipants)
+            nparticipants.remove(p2)
+
+            p3 = random.choice(nparticipants)
+            nparticipants.remove(p3)
+                    
+            plist = sorted([p1, p2, p3])  
+            npairs.add(tuple(plist)) 
+
+        else:
+            p1 = random.choice(nparticipants)
+            nparticipants.remove(p1)
+            
+            p2 = random.choice(nparticipants)
+            nparticipants.remove(p2)
+
+            p3 = random.choice(nparticipants)
+            nparticipants.remove(p3)    
+
+            p4 = random.choice(nparticipants)
+            nparticipants.remove(p4)    
+
+            plist = sorted([p1, p2, p3, p4])
+            npairs.add(tuple(plist))
+            
   
     # while still participants left to pair...
-    while len(nparticipants) > 0:
+    while len(nparticipants) >= group_size:
 
-        # take two random participants from list of participants
-        p1 = random.choice(nparticipants)
-        nparticipants.remove(p1)
+        if group_size==2:
+            # take two random participants from list of participants
+            p1 = random.choice(nparticipants)
+            nparticipants.remove(p1)
     
-        p2 = random.choice(nparticipants)
-        nparticipants.remove(p2)
+            p2 = random.choice(nparticipants)
+            nparticipants.remove(p2)
                 
-        # create alphabetically sorted list of participants
-        plist = [p1, p2]
-        plist.sort()
+            # create alphabetically sorted list of participants
+            plist = [p1, p2]
+            plist.sort()
                         
-        # add alphabetically sorted list to set of pairs
-        npairs.add(tuple(plist))
+            # add alphabetically sorted list to set of pairs
+            npairs.add(tuple(plist))
+
+        elif group_size==3:
+            p1 = random.choice(nparticipants)
+            nparticipants.remove(p1)
+        
+            p2 = random.choice(nparticipants)
+            nparticipants.remove(p2)
+
+            p3 = random.choice(nparticipants)
+            nparticipants.remove(p3)    
+
+            # create alphabetically sorted list of participants
+            plist = [p1, p2, p3]
+            plist.sort()
+                        
+            # add alphabetically sorted list to set of pairs
+            npairs.add(tuple(plist))
+
+        elif group_size==4:
+            p1 = random.choice(nparticipants)
+            nparticipants.remove(p1)
+        
+            p2 = random.choice(nparticipants)
+            nparticipants.remove(p2)
+
+            p3 = random.choice(nparticipants)
+            nparticipants.remove(p3)
+
+            p4 = random.choice(nparticipants)
+            nparticipants.remove(p4)    
+
+            # create alphabetically sorted list of participants
+            plist = [p1, p2, p3, p4]
+            plist.sort()
+                        
+            # add alphabetically sorted list to set of pairs
+            npairs.add(tuple(plist))
+        
+        else:
+            p1 = random.choice(nparticipants)
+            nparticipants.remove(p1)
+        
+            p2 = random.choice(nparticipants)
+            nparticipants.remove(p2)
+
+            p3 = random.choice(nparticipants)
+            nparticipants.remove(p3)
+
+            p4 = random.choice(nparticipants)
+            nparticipants.remove(p4)    
+
+            p5 = random.choice(nparticipants)
+            nparticipants.remove(p5) 
+
+            # create alphabetically sorted list of participants
+            plist = [p1, p2, p3, p4, p5]
+            plist.sort()
+                        
+            # add alphabetically sorted list to set of pairs
+            npairs.add(tuple(plist))
 
  
     # check if all new pairs are indeed new, else reset
