@@ -4,7 +4,7 @@ import random
 import copy
 import os
 
-# program name and online form URL, we can change these when we made a decision for the 
+# program name and online form URL, we can change these when we made a decision for the name and made a google forms
 PROGRAM_NAME = "Mystery Brew"
 FORM_URL = "https://your_form_link_here" 
 
@@ -12,14 +12,37 @@ def print_instructions():
     instructions = f"""
 Welcome to {PROGRAM_NAME}!
 
-To sign up, please fill out the online form at:
-    {FORM_URL}
+Follow these steps to participate in {PROGRAM_NAME}:
 
-After submitting the form, download the CSV file with responses.
-Make sure to save the CSV file as "Coffee Partner Lottery participants.csv"
-in the same directory as this script.
+1. **Fill Out the Online Form:**
+   - Visit our sign-up form at:
+       {FORM_URL}
+   - Enter your full name and valid email address.
+   - Complete any additional fields if required.
+   - Submit the form to record your response.
+
+2. **Download the CSV File:**
+   - After submitting the form, go to the form responses section.
+   - Look for the option to download or export responses.
+   - Download the responses as a CSV file.
+   - IMPORTANT: Save this file as "Coffee Partner Lottery participants.csv" 
+     in the same directory as this script.
+
+3. **Check the CSV File Format:**
+   - Ensure the CSV file includes the headers "Your name:" and "Your e-mail:".
+   - If there are extra columns, the program will ignore them, but the required columns must be present.
+
+4. **Run the Program:**
+   - Once the CSV file is correctly placed and named, run this Python script.
+   - The program will read the CSV file, randomly assign you to a group, and display a conversation starter for your meeting.
+
+5. **Enjoy!:**
+   - Your group details and a fun conversation starter will be printed on the screen.
+   - Follow any further instructions displayed by the program.
 """
     print(instructions)
+
+print_instructions()
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
