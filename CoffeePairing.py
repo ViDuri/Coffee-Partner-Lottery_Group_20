@@ -173,3 +173,5 @@ def main():
     group_messages()
     
     print("Job done.")
+
+main()
