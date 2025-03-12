@@ -4,7 +4,41 @@ import random
 import copy
 import os
 
-# Check for changes in the csv input branch
+# function for splitting into groups
+def split_into_groups(participants, group_size):
+    participants = participants.copy()  # avoid modifying the original list
+    random.shuffle(participants) #shuffle participants
+    n = len(participants) 
+    num_groups = n // group_size # number of groups
+    remainder = n % group_size # number of remaining participants
+    groups = []
+    start = 0
+    # loop remainders over the groups
+    for i in range(num_groups):
+        extra = 1 if i < remainder else 0 # when i is smaller than the remainder group is base group size
+        groups.append(participants[start:start+group_size+extra]) # add participiants to group
+        start += group_size + extra # update index to next participant
+    if start < n: # add remaining participants
+        groups.append(participants[start:])
+    return groups
+
+# function for loading old groups (avoid redundant matching)
+def load_old_groups(filename):
+    old_groups = set() # initialize set
+    if os.path.exists(filename): 
+        with open(filename, "r") as file:
+            csvreader = csv.reader(file, delimiter=',')
+            for row in csvreader:
+                group = sorted([email.strip() for email in row if email.strip()])
+                if group:
+                    old_groups.add(tuple(group))
+    return old_groups
+
+def append_new_groups(filename, groups):
+    mode = "a" if os.path.exists(filename) else "w" # append if the file exists, otherwise make a new one
+    with open(filename, mode) as file:
+        for group in groups:
+            file.write(','.join(group) + "\n")
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
@@ -40,66 +74,66 @@ if os.path.exists(all_pairs_csv):
 # load participant's data
 formdata = pd.read_csv(participants_csv, sep=DELIMITER)
 
-# create duplicate-free list of participants
-participants = list(set(formdata[header_email]))
+# # create duplicate-free list of participants
+# participants = list(set(formdata[header_email]))
 
- # init set of new pairs
-npairs = set()
+#  # init set of new pairs
+# npairs = set()
 
-# running set of participants
-nparticipants = copy.deepcopy(participants)
+# # running set of participants
+# nparticipants = copy.deepcopy(participants)
 
-# Boolean flag to check if new pairing has been found
-new_pairs_found = False
+# # Boolean flag to check if new pairing has been found
+# new_pairs_found = False
 
-# try creating new pairing until successful
-while not new_pairs_found:   # to do: add a maximum number of tries
+# # try creating new pairing until successful
+# while not new_pairs_found:   # to do: add a maximum number of tries
   
-    # if odd number of participants, create one triple, then pairs
-    if len(participants)%2 != 0:
+#     # if odd number of participants, create one triple, then pairs
+#     if len(participants)%2 != 0:
         
-        # take three random participants from list of participants
-        p1 = random.choice(nparticipants)
-        nparticipants.remove(p1)
+#         # take three random participants from list of participants
+#         p1 = random.choice(nparticipants)
+#         nparticipants.remove(p1)
     
-        p2 = random.choice(nparticipants)
-        nparticipants.remove(p2)
+#         p2 = random.choice(nparticipants)
+#         nparticipants.remove(p2)
         
-        p3 = random.choice(nparticipants)
-        nparticipants.remove(p3)
+#         p3 = random.choice(nparticipants)
+#         nparticipants.remove(p3)
         
-        # create alphabetically sorted list of participants
-        plist = [p1, p2, p3]
-        plist.sort()
+#         # create alphabetically sorted list of participants
+#         plist = [p1, p2, p3]
+#         plist.sort()
                         
-        # add alphabetically sorted list to set of pairs
-        npairs.add(tuple(plist))
+#         # add alphabetically sorted list to set of pairs
+#         npairs.add(tuple(plist))
 
   
-    # while still participants left to pair...
-    while len(nparticipants) > 0:
+#     # while still participants left to pair...
+#     while len(nparticipants) > 0:
 
-        # take two random participants from list of participants
-        p1 = random.choice(nparticipants)
-        nparticipants.remove(p1)
+#         # take two random participants from list of participants
+#         p1 = random.choice(nparticipants)
+#         nparticipants.remove(p1)
     
-        p2 = random.choice(nparticipants)
-        nparticipants.remove(p2)
+#         p2 = random.choice(nparticipants)
+#         nparticipants.remove(p2)
                 
-        # create alphabetically sorted list of participants
-        plist = [p1, p2]
-        plist.sort()
+#         # create alphabetically sorted list of participants
+#         plist = [p1, p2]
+#         plist.sort()
                         
-        # add alphabetically sorted list to set of pairs
-        npairs.add(tuple(plist))
+#         # add alphabetically sorted list to set of pairs
+#         npairs.add(tuple(plist))
 
  
-    # check if all new pairs are indeed new, else reset
-    if npairs.isdisjoint(opairs):
-        new_pairs_found = True
-    else:
-        npairs = set()
-        nparticipants = copy.deepcopy(participants)
+#     # check if all new pairs are indeed new, else reset
+#     if npairs.isdisjoint(opairs):
+#         new_pairs_found = True
+#     else:
+#         npairs = set()
+#         nparticipants = copy.deepcopy(participants)
 
 
 # assemble output for printout
@@ -109,15 +143,15 @@ output_string += "------------------------\n"
 output_string += "Today's coffee partners:\n"
 output_string += "------------------------\n"
 
-for pair in npairs:
-    pair = list(pair)
-    output_string += "* "
-    for i in range(0,len(pair)):
-        name_email_pair = f"{formdata[formdata[header_email] == pair[i]].iloc[0][header_name]} ({pair[i]})"
-        if i < len(pair)-1:
-            output_string += name_email_pair + ", "
-        else:
-            output_string += name_email_pair + "\n"
+# for pair in npairs:
+#     pair = list(pair)
+#     output_string += "* "
+#     for i in range(0,len(pair)):
+#         name_email_pair = f"{formdata[formdata[header_email] == pair[i]].iloc[0][header_name]} ({pair[i]})"
+#         if i < len(pair)-1:
+#             output_string += name_email_pair + ", "
+#         else:
+#             output_string += name_email_pair + "\n"
     
 # write output to console
 print(output_string)
@@ -126,33 +160,33 @@ print(output_string)
 with open(new_pairs_txt, "wb") as file:
     file.write(output_string.encode("utf8"))
 
-# write new pairs into CSV file (for e.g. use in MailMerge)
-with open(new_pairs_csv, "w") as file:
-    header = ["name1", "email1", "name2", "email2", "name3", "email3"]
-    file.write(DELIMITER.join(header) + "\n")
-    for pair in npairs:
-        pair = list(pair)
-        for i in range(0,len(pair)):
-            name_email_pair = f"{formdata[formdata[header_email] == pair[i]].iloc[0][header_name]}{DELIMITER} {pair[i]}"
-            if i < len(pair)-1:
-                file.write(name_email_pair + DELIMITER + " ")
-            else:
-                file.write(name_email_pair + "\n")
+# # write new pairs into CSV file (for e.g. use in MailMerge)
+# with open(new_pairs_csv, "w") as file:
+#     header = ["name1", "email1", "name2", "email2", "name3", "email3"]
+#     file.write(DELIMITER.join(header) + "\n")
+#     for pair in npairs:
+#         pair = list(pair)
+#         for i in range(0,len(pair)):
+#             name_email_pair = f"{formdata[formdata[header_email] == pair[i]].iloc[0][header_name]}{DELIMITER} {pair[i]}"
+#             if i < len(pair)-1:
+#                 file.write(name_email_pair + DELIMITER + " ")
+#             else:
+#                 file.write(name_email_pair + "\n")
                 
-# append pairs to history file
-if os.path.exists(all_pairs_csv):
-    mode = "a"
-else:
-    mode = "w"
+# # append pairs to history file
+# if os.path.exists(all_pairs_csv):
+#     mode = "a"
+# else:
+#     mode = "w"
 
-with open(all_pairs_csv, mode) as file:
-    for pair in npairs:
-        pair = list(pair)
-        for i in range(0,len(pair)):
-            if i < len(pair)-1:
-                file.write(pair[i] + DELIMITER)
-            else:
-                file.write(pair[i] + "\n")
+# with open(all_pairs_csv, mode) as file:
+#     for pair in npairs:
+#         pair = list(pair)
+#         for i in range(0,len(pair)):
+#             if i < len(pair)-1:
+#                 file.write(pair[i] + DELIMITER)
+#             else:
+#                 file.write(pair[i] + "\n")
 
 
              
