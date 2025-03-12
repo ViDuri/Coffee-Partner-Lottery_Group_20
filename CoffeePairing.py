@@ -4,7 +4,41 @@ import random
 import copy
 import os
 
-# Check for changes in the csv input branch
+# function for splitting into groups
+def split_into_groups(participants, group_size):
+    participants = participants.copy()  # avoid modifying the original list
+    random.shuffle(participants) #shuffle participants
+    n = len(participants) 
+    num_groups = n // group_size # number of groups
+    remainder = n % group_size # number of remaining participants
+    groups = []
+    start = 0
+    # loop remainders over the groups
+    for i in range(num_groups):
+        extra = 1 if i < remainder else 0 # when i is smaller than the remainder group is base group size
+        groups.append(participants[start:start+group_size+extra]) # add participiants to group
+        start += group_size + extra # update index to next participant
+    if start < n: # add remaining participants
+        groups.append(participants[start:])
+    return groups
+
+# function for loading old groups (avoid redundant matching)
+def load_old_groups(filename):
+    old_groups = set() # initialize set
+    if os.path.exists(filename): 
+        with open(filename, "r") as file:
+            csvreader = csv.reader(file, delimiter=',')
+            for row in csvreader:
+                group = sorted([email.strip() for email in row if email.strip()])
+                if group:
+                    old_groups.add(tuple(group))
+    return old_groups
+
+def append_new_groups(filename, groups):
+    mode = "a" if os.path.exists(filename) else "w" # append if the file exists, otherwise make a new one
+    with open(filename, mode) as file:
+        for group in groups:
+            file.write(','.join(group) + "\n")
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
