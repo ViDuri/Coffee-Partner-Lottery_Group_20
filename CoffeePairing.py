@@ -3,6 +3,23 @@ import csv
 import random
 import copy
 import os
+# for API
+import gspread
+from google.oauth2.service_account import Credentials
+
+scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+creds = Credentials.from_service_account_file("credentials.json", scopes=scopes)
+client = gspread.authorize(creds)
+
+#defining Id from link https://docs.google.com/spreadsheets/d/1dcTue3ya0Py7loDogTX7FttyDtFXDCwqKO2h9fNE09A/edit?gid=1629017708#gid=1629017708
+sheet_id = "1dcTue3ya0Py7loDogTX7FttyDtFXDCwqKO2h9fNE09A"
+sheet = client.open_by_key(sheet_id)
+
+values_list = sheet.sheet1.row_values(1)
+print(values_list)
+
+
+
 
 # program name and online form URL, we can change these when we made a decision for the name and made a google forms
 PROGRAM_NAME = "Mystery Brew"
