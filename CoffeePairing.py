@@ -4,6 +4,18 @@ import random
 import copy
 import os
 
+# function for group size
+def group_size_input():
+    while True:
+        try:
+            group_size = int(input("Please enter your preferred group size: "))
+            if group_size < 2:
+                print("Group size should be bigger than 2.")
+            else:
+                return group_size
+        except ValueError:
+            print("Invalid Input")
+
 # function for splitting into groups
 def split_into_groups(participants, group_size):
     participants = participants.copy()  # avoid modifying the original list
