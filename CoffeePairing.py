@@ -10,9 +10,7 @@ def group_size_input():
         if 2 <= group_size <= 5:
             break
         else:
-            print("Please enter a group size between 2 and 5")
-
-group_size_input() 
+            print("Please enter a group size")
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
