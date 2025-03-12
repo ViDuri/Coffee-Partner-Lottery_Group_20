@@ -3,50 +3,8 @@ import csv
 import random
 import copy
 import os
-from pathlib import Path  # Importing Path for file handling
 
-# function for reading a txt file with conversation starters
-def get_conversation_starter():
-    starters_file = "conversation_starters.txt"
-
-    if os.path.exists(starters_file): # check if the file exists, otherwise return the standard sentence
-        with open(starters_file, 'r') as file:
-            lines = open(starters_file).read().splitlines()
-            starter = random.choice(lines)
-            return starter
-    return "What's your favorite colour?"  
-
-# test function, remove when finishing
-if __name__ == "__main__":
-    print("Conversation starter:", get_conversation_starter())
-
-# function for making a txt file for each group (with convo.starter) - Sandra
-def group_messages():
-    group_no = 1 # tracking group numbering, initial value 1
-
-    for group in npairs:
-        group_list = list(group) # touple to list
-        # converting emails to participant names
-        p_in_group = [formdata[formdata[header_email] == email].iloc[0][header_name] for email in group_list]
-
-        # getting conversation starter
-        starter = get_conversation_starter()
-
-        # group message templapte, PROGRAM_NAME from the 1st branch
-        message = f"""
-    Hello {", ".join(p_in_group)}!
-    You have been gathered together for a {PROGRAM_NAME}.
-
-    To start your meeting: 
-    {starter}
-
-    Enjoy your coffee!
-    """
-        # saving message to a file
-        file_name = f"group_{group_no}.txt"
-        Path(file_name).write_text(message, encoding="utf-8")
-        print(f"Saved message for Group {group_no}: {file_name}")  # for checking
-        group_no += 1  # increased group number
+# Check for changes in the csv input branch
 
 # path to the CSV files with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
@@ -196,8 +154,7 @@ with open(all_pairs_csv, mode) as file:
             else:
                 file.write(pair[i] + "\n")
 
-# calling the function to generate .txt - Sandra
-group_messages()
+
              
 # print finishing message
 print()
