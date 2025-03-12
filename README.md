@@ -1,4 +1,11 @@
-# Coffee Partner Lottery
+# Coffee Partner Lottery Group 20 : "Mystery Brew"
+
+Forked directory for assignment Computational thinking and programming UU. 
+
+The credentials file was for trying to get the API functioning, but we weren't able to do that in time. 
+
+
+# Original Text
 A small project from Covid-19 times, for generating random pairings of people who can have a virtual chat and coffee together. The Python script in this repo takes care of the generation, my whole process for the lottery is as follows: 
 
 1. Let interested people sign up. I use MS Forms for the Coffee Partner Lottery at UU's Department of Information and Computing Sciences (template available [here](https://forms.office.com/Pages/ShareFormPage.aspx?id=oFgn10akD06gqkv5WkoQ51EXCAYj7jZCpuwTHAmfcRhUQk1ZOEtTTDJBQVozU0tVN0ZSNlFGWDEwNC4u&sharetoken=NNfcIwyZoQl07ZdXpHkZ)), but Google Forms or another similar tool will also do. You can download the responses and save them as a CSV file (recommended name "Coffee Partner Lottery participants.csv"), which is the input for the Python script.  
