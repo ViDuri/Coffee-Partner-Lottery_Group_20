@@ -9,7 +9,7 @@ from pathlib import Path
 PROGRAM_NAME = "Mystery Brew"
 FORM_URL = "https://forms.gle/4N1a1LbFNmTovK9cA" 
 
-DELIMITER=','
+DELIMITER = ','
 
 def print_instructions():
     instructions = f"""
@@ -47,53 +47,50 @@ Follow these steps to participate in {PROGRAM_NAME}:
 
 # call the function for the instructions
 print_instructions()
-
 print("Press Enter when you want to start")
 
 # function for reading a txt file with conversation starters
 def get_conversation_starter():
     starters_file = "conversation_starters.txt"
-
-    if os.path.exists(starters_file): # check if the file exists, otherwise return the standard sentence
-        with open(starters_file, 'r') as file:
-            lines = open(starters_file).read().splitlines()
+    if os.path.exists(starters_file):  # check if the file exists, otherwise return the standard sentence
+        with open(starters_file, 'r', encoding="utf8") as file:
+            lines = file.read().splitlines()
             starter = random.choice(lines)
             return starter
     return "What's your favorite colour?"  
 
-# function for making a txt file for each group (with convo.starter) - Sandra
+# function for making a txt file for each group (with conversation starter) - Sandra
 def group_messages():
-    group_no = 1 # tracking group numbering, initial value 1
- 
+    group_no = 1  # tracking group numbering, initial value 1
     for group in npairs:
-        group_list = list(group) # touple to list
+        group_list = list(group)  # tuple to list
         # converting emails to participant names
         p_in_group = [formdata[formdata[header_email] == email].iloc[0][header_name] for email in group_list]
-        # getting conversation starter
+        # getting conversation starter for this group
         starter = get_conversation_starter()
-        # group message templapte, PROGRAM_NAME from the 1st branch
+        # group message template, PROGRAM_NAME from the 1st branch
         message = f"""
-    Hello {", ".join(p_in_group)}!
-    You have been gathered together for a {PROGRAM_NAME}.
- 
-    To start your meeting: 
-    {starter}
- 
-    Enjoy your coffee!
-    """
+Hello {", ".join(p_in_group)}!
+You have been gathered together for a {PROGRAM_NAME}.
+
+To start your meeting: 
+{starter}
+
+Enjoy your coffee!
+"""
         # saving message to a file
         file_name = f"group_{group_no}.txt"
         Path(file_name).write_text(message, encoding="utf-8")
         print(f"Saved message for Group {group_no}: {file_name}")  # for checking
-        group_no += 1  # increased group number
+        group_no += 1  # increase group number
 
-# function for group size
+# function for group size input
 def group_size_input():
     while True:
         try:
             group_size = int(input("Please enter your preferred group size: "))
             if group_size < 2:
-                print("Group size should be bigger than 2.")
+                print("Group size should be at least 2.")
             else:
                 return group_size
         except ValueError:
@@ -102,25 +99,25 @@ def group_size_input():
 # function for splitting into groups
 def split_into_groups(participants, group_size):
     participants = participants.copy()  # avoid modifying the original list
-    random.shuffle(participants) #shuffle participants
-    n = len(participants) 
-    num_groups = n // group_size # number of groups
-    remainder = n % group_size # number of remaining participants
+    random.shuffle(participants)  # shuffle participants
+    n = len(participants)
+    num_groups = n // group_size  # number of groups
+    remainder = n % group_size  # number of remaining participants
     groups = []
     start = 0
-    # loop remainders over the groups
+    # loop through groups, distributing extra participants if needed
     for i in range(num_groups):
-        extra = 1 if i < remainder else 0 # when i is smaller than the remainder group is base group size
-        groups.append(participants[start:start+group_size+extra]) # add participiants to group
-        start += group_size + extra # update index to next participant
-    if start < n: # add remaining participants
+        extra = 1 if i < remainder else 0
+        groups.append(participants[start:start+group_size+extra])
+        start += group_size + extra
+    if start < n:  # add any remaining participants
         groups.append(participants[start:])
     return groups
 
 # function for loading old groups (avoid redundant matching)
 def load_old_groups(filename):
-    old_groups = set() # initialize set
-    if os.path.exists(filename): 
+    old_groups = set()  # initialize set
+    if os.path.exists(filename):
         with open(filename, "r") as file:
             csvreader = csv.reader(file, delimiter=',')
             for row in csvreader:
@@ -130,12 +127,12 @@ def load_old_groups(filename):
     return old_groups
 
 def append_new_groups(filename, groups):
-    mode = "a" if os.path.exists(filename) else "w" # append if the file exists, otherwise make a new one
+    mode = "a" if os.path.exists(filename) else "w"  # append if file exists, else create new
     with open(filename, mode) as file:
         for group in groups:
             file.write(','.join(group) + "\n")
 
-# path to the CSV files with participant data
+# path to the CSV file with participant data
 participants_csv = "Coffee Partner Lottery participants.csv"
 formdata = pd.read_csv(participants_csv, sep=DELIMITER)
 
@@ -151,13 +148,14 @@ new_pairs_csv = "Coffee Partner Lottery new pairs.csv"
 
 # path to CSV file that stores all pairings (to avoid repetition)
 all_pairs_csv = "Coffee Partner Lottery all pairs.csv"
-        
+
 # init set of old pairs
 opairs = set()
 
 def main():
     print_instructions()
     input("Press Enter when you want to start...")
+    
     # Get the desired group size from the user
     group_size = group_size_input()
     
@@ -169,9 +167,25 @@ def main():
     global npairs
     npairs = split_into_groups(participants, group_size)
     
+    # Build and print the output string showing the groups on screen
+    output_string = "------------------------\n"
+    output_string += "Today's coffee partners:\n"
+    output_string += "------------------------\n"
+    for group in npairs:
+        group_list = list(group)
+        # Convert each email to "Name (email)" using the CSV data
+        names_emails = [f"{formdata[formdata[header_email] == email].iloc[0][header_name]} ({email})" 
+                        for email in group_list]
+        output_string += "* " + ", ".join(names_emails) + "\n"
+    print("\n" + output_string)
+    
+    round_starter = get_conversation_starter()
+    print("Conversation Starter for this round:")
+    print(round_starter + "\n")
     # Generate and save group messages for each group
     group_messages()
     
     print("Job done.")
 
+# call main
 main()
