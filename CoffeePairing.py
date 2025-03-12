@@ -6,8 +6,8 @@ import os
 
 # program name and online form URL, we can change these when we made a decision for the name and made a google forms
 PROGRAM_NAME = "Mystery Brew"
-FORM_URL = "https://your_form_link_here" 
-
+FORM_URL = "https://forms.gle/4N1a1LbFNmTovK9cA " 
+DATA_URL = "https://tinyurl.com/MysteryBrewParticipants2"
 
 # test changing
 
@@ -26,8 +26,9 @@ Follow these steps to participate in {PROGRAM_NAME}:
 
 2. **Download the CSV File:**
    - After submitting the form, go to the form responses section.
-   - Look for the option to download or export responses.
-   - Download the responses as a CSV file.
+   - Look for the option to download or export responses as a .csv file.
+   - If you cannot find it, use this link to download it form Google Sheets:
+       {DATA_URL}
    - IMPORTANT: Save this file as "Coffee Partner Lottery participants.csv" 
      in the same directory as this script.
 
