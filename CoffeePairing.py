@@ -4,6 +4,17 @@ import random
 import copy
 import os
 
+# function for reading a txt file with conversation starters
+def get_conversation_starter():
+    starters_file = "conversation_starters.txt"
+
+    if os.path.exists(starters_file): # check if the file exists, otherwise return the standard sentence
+        with open(starters_file, 'r') as file:
+            lines = open(starters_file).read().splitlines()
+            starter = random.choice(lines)
+            return starter
+    return "What's your favorite colour?"  
+
 # function for group size
 def group_size_input():
     while True:
