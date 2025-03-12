@@ -3,10 +3,13 @@ import csv
 import random
 import copy
 import os
+from pathlib import Path
 
 # program name and online form URL, we can change these when we made a decision for the name and made a google forms
 PROGRAM_NAME = "Mystery Brew"
 FORM_URL = "https://forms.gle/4N1a1LbFNmTovK9cA" 
+
+DELIMITER=','
 
 def print_instructions():
     instructions = f"""
@@ -66,10 +69,8 @@ def group_messages():
         group_list = list(group) # touple to list
         # converting emails to participant names
         p_in_group = [formdata[formdata[header_email] == email].iloc[0][header_name] for email in group_list]
- 
         # getting conversation starter
         starter = get_conversation_starter()
- 
         # group message templapte, PROGRAM_NAME from the 1st branch
         message = f"""
     Hello {", ".join(p_in_group)}!
@@ -154,12 +155,21 @@ all_pairs_csv = "Coffee Partner Lottery all pairs.csv"
 # init set of old pairs
 opairs = set()
 
-DELIMITER=','
-
-
-
-
-print()
-# calling the function to generate .txt - Sandra
-group_messages()
-print("Job done.")
+def main():
+    print_instructions()
+    input("Press Enter when you want to start...")
+    # Get the desired group size from the user
+    group_size = group_size_input()
+    
+    # Get a list of participant emails from the CSV file (removing any extra whitespace)
+    participants = list(set(formdata[header_email].str.strip()))
+    
+    # Generate groups using the split_into_groups function
+    # We assign the resulting groups to the global variable 'npairs'
+    global npairs
+    npairs = split_into_groups(participants, group_size)
+    
+    # Generate and save group messages for each group
+    group_messages()
+    
+    print("Job done.")
